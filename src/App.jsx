@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Header from "./components/Header";
 import Section from "./components/Section";
 import IngredientList from "./components/IngredientList";
@@ -7,6 +7,13 @@ export default function App() {
   const [reccipe, setReccipe] = useState("");
   const [ingredients, setIngredient] = useState([]);
   const [recipeShown, setRecipeShown] = useState(false);
+  const reccipePart = useRef(null);
+  useEffect(() => {
+    if (reccipe != "" && reccipePart) {
+      reccipePart.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [reccipe]);
+
   function handleSubmit(formData) {
     const newIngredient = formData.get("ingredient");
     setIngredient((prev) => [...prev, newIngredient]);
@@ -32,7 +39,7 @@ export default function App() {
           {ingredients.length > 2 && (
             <div className="get-recipe">
               <p className="ready-text">Ready for the recipe</p>
-              <div className="button-p">
+              <div ref={reccipePart} className="button-p">
                 <p className="genereate-text">generate the recipe</p>
                 <button
                   onClick={async () => {
